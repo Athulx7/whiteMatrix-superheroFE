@@ -53,9 +53,9 @@ function UserHeader() {
             className="lg:hidden text-gray-700 focus:outline-none"
           >
             {responcive ? (
-              <FontAwesomeIcon icon={faXmark} className="text-red-600" />
+              <FontAwesomeIcon icon={faXmark} size="2x" className="text-red-600" />
             ) : (
-              <FontAwesomeIcon icon={faBars} />
+              <FontAwesomeIcon icon={faBars} size="2x" />
             )}
           </button>
 
