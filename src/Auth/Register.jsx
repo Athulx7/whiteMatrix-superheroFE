@@ -1,8 +1,63 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Loginimage from "../assets/loginimage.png";
 import { Link } from 'react-router-dom';
 
 function Register() {
+
+    const [registerData,setRegisterData] = useState({
+
+        name:'',
+        email:'',
+        password:''
+    })
+
+    const [error,setError] = useState({})
+
+    const handleOnchange = (e)=>{
+        setRegisterData({...registerData,[e.target.name]:e.target.value})
+    }
+
+    const validation = ()=>{
+        const newError = {}
+
+        if(!registerData.name){
+            newError.name = "User name is required"     
+        }
+        else if(!/^[a-zA-Z\s]+$/.test(registerData.name)){
+            newError.name = "User name can only contain letters and spaces"
+
+        }
+
+        if(!registerData.email){
+            newError.email = "Email is requierd"
+        }
+        else if (!/\S+@\S+\.\S+/.test(registerData.email)){
+            newError.email = "Enter a valid email id"
+        }
+
+        if(!registerData.password){
+            newError.password = "Password is required"
+        }
+        else if(registerData.password.length < 8){
+            newError.password = "please enter a 8 characters"
+
+        }
+
+
+        setError(newError)
+        return Object.keys(newError).length===0
+    }
+
+
+    const handleRegister =(e)=>{
+        e.preventDefault()
+        if(validation()){
+        console.log(registerData)
+
+
+        }
+    }
+
   return (
 
     <>
@@ -16,7 +71,7 @@ function Register() {
 
   <div className="md:w-1/2 flex flex-col items-center md:items-start text-center md:text-left mb-32">
       <div className="md:ml-8 lg:ml-16 w-full">
-        <form className="space-y-6 bg-white shadow-md rounded-lg p-8 w-full max-w-lg">
+        <div className="space-y-6 bg-white shadow-md rounded-lg p-8 w-full max-w-lg">
 
         <div>
             <label className="block font-semibold mb-2">
@@ -27,7 +82,12 @@ function Register() {
               name="name"
               className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-gray-400"
               placeholder="Enter your name"
+              onChange={handleOnchange}
+              value={registerData.name}
             />
+             {error.name && (
+              <span className="text-red-500">{error.name}</span>
+            )}
           </div>
 
 
@@ -40,7 +100,13 @@ function Register() {
               name="email"
               className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-gray-400"
               placeholder="Enter your email"
+              onChange={handleOnchange}
+              value={registerData.email}
+
             />
+             {error.email && (
+              <span className="text-red-500">{error.email}</span>
+            )}
           </div>
 
           <div>
@@ -50,12 +116,17 @@ function Register() {
               name="password"
               className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-gray-400"
               placeholder="Enter your password"
+              onChange={handleOnchange}
+              value={registerData.password}
             />
+             {error.password && (
+              <span className="text-red-500">{error.password}</span>
+            )}
           </div>
 
           <div className="flex justify-center">
             <button
-              type="submit"
+             onClick={handleRegister}
               className="w-full bg-black text-white font-bold p-2 rounded transition-transform duration-500 hover:scale-105"
             >
               REGISTER
@@ -73,7 +144,7 @@ function Register() {
               </Link>
             </p>
           </div>
-        </form>
+        </div>
       </div>
     </div>
 

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 function UserAddGrie() {
   const [grievanceData, setGrievanceData] = useState({
@@ -10,9 +10,18 @@ function UserAddGrie() {
     subject: "",
     description: "",
     date: "",
+    evidence:'',
     priority: "",
     contactMethod: "",
   });
+
+
+  const [preview,setPreview] = useState("")
+  useEffect(()=>{
+    if(grievanceData.evidence){
+        setPreview(URL.createObjectURL(grievanceData.evidence))
+    }
+  },[grievanceData.evidence])
 
   const [errors, setErrors] = useState({});
 
@@ -216,12 +225,18 @@ function UserAddGrie() {
             >
               Upload Evidence (optional)
             </label>
+            <label className="flex h-40">
             <input
               type="file"
               id="evidence"
               className="w-full p-3 border border-gray-300 rounded-md"
-              accept="image/*,application/pdf"
+              onChange={(e)=>setGrievanceData({...grievanceData, evidence:e.target.files[0] })}
             />
+            <img src={preview
+                ? preview
+                : "https://cdn.pixabay.com/photo/2021/10/11/00/59/upload-6699084_1280.png"} className="w-52 ms-3" alt="" />
+            </label>
+           
           </div>
 
         
