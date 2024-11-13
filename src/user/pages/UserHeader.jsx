@@ -76,14 +76,14 @@ function UserHeader() {
             >
               ABOUT US
             </Link>
-            <a
-              href="#deets"
+            <Link
+             to={'/uaddgrievance'}
               className="block lg:inline-block text-gray-700 hover:text-red-700 hover:font-bold  py-2 lg:py-0 transition-transform duration-500 hover:scale-105"
             >
               ADD GRIEVANCE
-            </a>
+            </Link>
             <Link
-              href="#memes"
+              to={'/login'}
               className="block lg:inline-block py-2 lg:py-0 transition-transform duration-500 hover:scale-105"
             >
               <div className="px-5 py-2 bg-black rounded-md text-white font-bold">

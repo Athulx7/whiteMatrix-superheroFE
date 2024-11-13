@@ -35,10 +35,7 @@ function UserHome() {
             alt="Hero Silhouette"
             className="max-w-full h-auto ms-10 transition-transform duration-500 hover:scale-105"
           />
-          {/* <div className="ms-1">
-          <UserBot  />
-
-          </div> */}
+          
         </div>
       </div>
       
