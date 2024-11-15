@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import UserAbout from "./UserAbout";
 import UserBot from "./UserBot";
+import { Link } from "react-router-dom";
 
 function UserHome() {
   return (
@@ -21,10 +22,10 @@ function UserHome() {
             </p>
 
             <div className="mt-5 flex justify-center md:justify-start">
-              <button className="px-4 py-2 bg-red-700 rounded-md text-white font-bold transition-transform duration-500 hover:scale-105">
+              <Link to={'/uaddgrievance'} className="px-4 py-2 bg-red-700 rounded-md text-white font-bold transition-transform duration-500 hover:scale-105">
                 SEND A GRIEVANCE NOW
                 <FontAwesomeIcon className="ml-2" icon={faArrowRight} />
-              </button>
+              </Link>
             </div>
           </div>
         </div>

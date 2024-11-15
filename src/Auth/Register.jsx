@@ -1,8 +1,12 @@
 import React, { useState } from 'react'
 import Loginimage from "../assets/loginimage.png";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { registerAPI } from '../Services/allApi';
+import Swal from 'sweetalert2';
 
 function Register() {
+  const navigate = useNavigate()
 
     const [registerData,setRegisterData] = useState({
 
@@ -11,11 +15,13 @@ function Register() {
         password:''
     })
 
+    const handleOnchange = (e)=>{
+      setRegisterData({...registerData,[e.target.name]:e.target.value})
+  }
+
     const [error,setError] = useState({})
 
-    const handleOnchange = (e)=>{
-        setRegisterData({...registerData,[e.target.name]:e.target.value})
-    }
+  
 
     const validation = ()=>{
         const newError = {}
@@ -49,14 +55,47 @@ function Register() {
     }
 
 
-    const handleRegister =(e)=>{
+    // handle register button 
+
+
+    const handleRegister = async(e)=>{
         e.preventDefault()
         if(validation()){
-        console.log(registerData)
+        // console.log(registerData)
+
+        const result = await registerAPI(registerData)
+        // console.log(result)
+        if(result.status === 200){
+         
+          Swal.fire({
+            title: 'Success!',
+            text: 'Your Account is registers successfully, "please login to add your grevance."',
+            icon: 'success',
+            confirmButtonText: 'OK'
+          });
+          setRegisterData({
+            name:'',
+            email:'',
+            password:''
+          })
+
+          navigate('/login')
 
 
         }
+        else if(result.status === 400){
+          toast.warning("the email id is already registered")
+        }
+
+
+
+        }
+        else{
+          toast.warning("please fill the form comletely")
+        }
     }
+
+
 
   return (
 

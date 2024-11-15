@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import Swal from "sweetalert2";
+import { addGrievanceAPI } from "../../Services/allApi";
 
 function UserAddGrie() {
+  const navigate = useNavigate();
   const [grievanceData, setGrievanceData] = useState({
     fullName: "",
     email: "",
@@ -10,18 +15,19 @@ function UserAddGrie() {
     subject: "",
     description: "",
     date: "",
-    evidence:'',
+    evidence: "",
     priority: "",
     contactMethod: "",
   });
 
+  
 
-  const [preview,setPreview] = useState("")
-  useEffect(()=>{
-    if(grievanceData.evidence){
-        setPreview(URL.createObjectURL(grievanceData.evidence))
+  const [preview, setPreview] = useState("");
+  useEffect(() => {
+    if (grievanceData.evidence) {
+      setPreview(URL.createObjectURL(grievanceData.evidence));
     }
-  },[grievanceData.evidence])
+  }, [grievanceData.evidence]);
 
   const [errors, setErrors] = useState({});
 
@@ -64,11 +70,119 @@ function UserAddGrie() {
     return Object.keys(newerror).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const token = sessionStorage.getItem("token");
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (validation()) {
-      alert("Grievance submitted successfully!");
-      console.log(grievanceData);
+    if (token) {
+      if (validation()) {
+        // alert("Grievance submitted successfully!");
+        console.log(grievanceData);
+
+        const reqBody = new FormData();
+        reqBody.append("fullname", grievanceData.fullName);
+        reqBody.append("email", grievanceData.email);
+        reqBody.append("phone", grievanceData.phone);
+        reqBody.append("location", grievanceData.location);
+        reqBody.append("grievanceType", grievanceData.grievanceType);
+        reqBody.append("subject", grievanceData.subject);
+        reqBody.append("description", grievanceData.description);
+        reqBody.append("date", grievanceData.date);
+        reqBody.append("evidence", grievanceData.evidence);
+        reqBody.append("priority", grievanceData.priority);
+        reqBody.append("contactMethod", grievanceData.contactMethod);
+
+        if (grievanceData.evidence) {
+          console.log("if the image is added");
+          const reqHeader = {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          };
+          const result = await addGrievanceAPI(reqBody, reqHeader);
+          //  console.log(result)
+          if (result.status === 200) {
+            Swal.fire({
+              title: "Success!",
+              text: '"Your grievance is added successfully. Our superhero will contact you suddenly!" ',
+              icon: "success",
+              confirmButtonText: "OK",
+            });
+            setGrievanceData({
+              fullName: "",
+              email: "",
+              phone: "",
+              location: "",
+              grievanceType: "",
+              subject: "",
+              description: "",
+              date: "",
+              evidence: "",
+              priority: "",
+              contactMethod: "",
+            });
+            navigate("/");
+          } else if (result.status === 400) {
+            Swal.fire({
+              title: "Already Exists!",
+              text: '"This grievance is already part of our mission. Our superhero is actively working on it!" ',
+              icon: "warning",
+              confirmButtonText: "OK",
+            });
+          } else {
+            toast.error("something went wrong");
+          }
+        } else {
+          console.log("if the is no image");
+          const reqHeader = {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          };
+
+          const result = await addGrievanceAPI(reqBody, reqHeader);
+          // console.log(result)
+          if (result.status === 200) {
+            Swal.fire({
+              title: "Success!",
+              text: '"Your grievance is added successfully. Our superhero will contact you suddenly!" ',
+              icon: "success",
+              confirmButtonText: "OK",
+            });
+            setGrievanceData({
+              fullName: "",
+              email: "",
+              phone: "",
+              location: "",
+              grievanceType: "",
+              subject: "",
+              description: "",
+              date: "",
+              evidence: "",
+              priority: "",
+              contactMethod: "",
+            });
+            navigate("/");
+          } else if (result.status === 400) {
+            Swal.fire({
+              title: "Already Exists!",
+              text: '"This grievance is already part of our mission. Our superhero is actively working on it!" ',
+              icon: "warning",
+              confirmButtonText: "OK",
+            });
+          } else {
+            toast.error("something went wrong");
+          }
+        }
+      } else {
+        toast.warning("please fill the required sections of the form");
+      }
+    } else {
+      Swal.fire({
+        title: "SORRY !!",
+        text: '"please login to add your grevance."',
+        icon: "warning",
+        confirmButtonText: "OK",
+      });
+      navigate("/login");
     }
   };
 
@@ -83,7 +197,6 @@ function UserAddGrie() {
           onSubmit={handleSubmit}
           className="space-y-6 mt-5 bg-white shadow-md rounded-lg p-8 "
         >
-         
           <div>
             <label className="block font-semibold mb-2">Full Name</label>
             <input
@@ -99,8 +212,6 @@ function UserAddGrie() {
             )}
           </div>
 
-         
-
           <div>
             <label className="block font-semibold mb-2">Email Address</label>
             <input
@@ -115,8 +226,6 @@ function UserAddGrie() {
               <span className="text-red-500">{errors.email}</span>
             )}
           </div>
-
-          
 
           <div>
             <label className="block font-semibold mb-2">
@@ -135,7 +244,6 @@ function UserAddGrie() {
             )}
           </div>
 
-       
           <div>
             <label className="block font-semibold mb-2">Location</label>
             <input
@@ -151,7 +259,6 @@ function UserAddGrie() {
             )}
           </div>
 
-          
           <div>
             <label className="block font-semibold mb-2">Grievance Type</label>
             <select
@@ -160,7 +267,9 @@ function UserAddGrie() {
               onChange={handleOnchange}
               className="w-full p-2 border rounded"
             >
-              <option value="" className="">Select Type</option>
+              <option value="" className="">
+                Select Type
+              </option>
               <option value="Community Safety">Community Safety</option>
               <option value="Environmental Concern">
                 Environmental Concern
@@ -173,7 +282,6 @@ function UserAddGrie() {
             )}
           </div>
 
-          
           <div>
             <label className="block font-semibold mb-2">Subject</label>
             <input
@@ -189,7 +297,6 @@ function UserAddGrie() {
             )}
           </div>
 
-        
           <div>
             <label className="block font-semibold mb-2">Description</label>
             <textarea
@@ -204,7 +311,6 @@ function UserAddGrie() {
             )}
           </div>
 
-          
           <div>
             <label className="block font-semibold mb-2">Date of Incident</label>
             <input
@@ -217,29 +323,34 @@ function UserAddGrie() {
             {errors.date && <span className="text-red-500">{errors.date}</span>}
           </div>
 
-        
           <div>
-            <label
-              className="block font-semibold mb-2"
-              htmlFor="evidence"
-            >
+            <label className="block font-semibold mb-2" htmlFor="evidence">
               Upload Evidence (optional)
             </label>
             <label className="flex h-40">
-            <input
-              type="file"
-              id="evidence"
-              className="w-full p-3 border border-gray-300 rounded-md"
-              onChange={(e)=>setGrievanceData({...grievanceData, evidence:e.target.files[0] })}
-            />
-            <img src={preview
-                ? preview
-                : "https://cdn.pixabay.com/photo/2021/10/11/00/59/upload-6699084_1280.png"} className="w-52 ms-3" alt="" />
+              <input
+                type="file"
+                id="evidence"
+                className="w-full p-3 border border-gray-300 rounded-md"
+                onChange={(e) =>
+                  setGrievanceData({
+                    ...grievanceData,
+                    evidence: e.target.files[0],
+                  })
+                }
+              />
+              <img
+                src={
+                  preview
+                    ? preview
+                    : "https://cdn.pixabay.com/photo/2021/10/11/00/59/upload-6699084_1280.png"
+                }
+                className="w-52 ms-3"
+                alt=""
+              />
             </label>
-           
           </div>
 
-        
           <div>
             <label className="block font-semibold mb-2">Priority Level</label>
             <select
@@ -258,7 +369,6 @@ function UserAddGrie() {
             )}
           </div>
 
-          
           <div>
             <label className="block font-semibold mb-2">
               Preferred Contact Method
@@ -278,7 +388,6 @@ function UserAddGrie() {
             )}
           </div>
 
-         
           <div className="text-center">
             <button
               type="submit"

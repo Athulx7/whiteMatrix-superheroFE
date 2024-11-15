@@ -1,8 +1,13 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Loginimage from "../assets/loginimage.png";
+import { toast } from "react-toastify";
+import { loginAPI } from "../Services/allApi";
+import Swal from "sweetalert2";
 
 function Login() {
+
+  const navigate = useNavigate()
 
     const [logindata,setLogindata] = useState({
         email:'',
@@ -40,11 +45,39 @@ function Login() {
 
 
 
-    const handleSubmit = (e)=>{
+    const handleSubmit = async(e)=>{
         e.preventDefault();
         if(validation()){
-            console.log(logindata)
+            // console.log(logindata)
+            const result  =  await loginAPI(logindata)
+            console.log(result)
+            if(result.status === 200){
 
+              if(result.data.data.role === 'user'){
+                sessionStorage.setItem("user",JSON.stringify(result.data.data))
+                sessionStorage.setItem("token",result.data.token)
+                Swal.fire({
+                  title: 'Success!',
+                  text: 'Login successfully, "please add your grevance to SUPER HERO."',
+                  icon: 'success',
+                  confirmButtonText: 'OK'
+                });
+                navigate('/')
+
+
+              }
+              else{
+                toast.error("something went wrong")
+              }
+
+            }
+            else if(result.status === 400){
+              toast.warning("Invalid Email or Password")
+            }
+
+        }
+        else{
+          toast.warning("please fill the form completely")
         }
         
 
