@@ -6,82 +6,65 @@ import { loginAPI } from "../Services/allApi";
 import Swal from "sweetalert2";
 
 function Login() {
+  const navigate = useNavigate();
 
-  const navigate = useNavigate()
+  const [logindata, setLogindata] = useState({
+    email: "",
+    password: "",
+  });
 
-    const [logindata,setLogindata] = useState({
-        email:'',
-        password:''
-    })
+  const [error, setError] = useState({});
 
-    const [error,setError] = useState({})
+  const handleOnchange = (e) => {
+    setLogindata({ ...logindata, [e.target.name]: e.target.value });
+  };
 
-    const handleOnchange = (e)=>{
-        setLogindata({...logindata,[e.target.name]:e.target.value})
+  const validation = () => {
+    const newError = {};
+
+    if (!logindata.email) {
+      newError.email = "Email is requierd";
+    } else if (!/\S+@\S+\.\S+/.test(logindata.email)) {
+      newError.email = "Enter a valid email id";
     }
 
-    const validation = ()=>{
-        const newError = {}
-
-        if(!logindata.email){
-            newError.email = "Email is requierd"
-        }
-        else if (!/\S+@\S+\.\S+/.test(logindata.email)){
-            newError.email = "Enter a valid email id"
-        }
-
-        if(!logindata.password){
-            newError.password = "Password is required"
-        }
-        else if(logindata.password.length < 8){
-            newError.password = "please enter a 8 characters"
-
-        }
-
-        setError(newError)
-        return Object.keys(newError).length === 0
-
+    if (!logindata.password) {
+      newError.password = "Password is required";
+    } else if (logindata.password.length < 8) {
+      newError.password = "please enter a 8 characters";
     }
 
+    setError(newError);
+    return Object.keys(newError).length === 0;
+  };
 
-
-    const handleSubmit = async(e)=>{
-        e.preventDefault();
-        if(validation()){
-            // console.log(logindata)
-            const result  =  await loginAPI(logindata)
-            console.log(result)
-            if(result.status === 200){
-
-              if(result.data.data.role === 'user'){
-                sessionStorage.setItem("user",JSON.stringify(result.data.data))
-                sessionStorage.setItem("token",result.data.token)
-                Swal.fire({
-                  title: 'Success!',
-                  text: 'Login successfully, "please add your grevance to SUPER HERO."',
-                  icon: 'success',
-                  confirmButtonText: 'OK'
-                });
-                navigate('/')
-
-
-              }
-              else{
-                toast.error("something went wrong")
-              }
-
-            }
-            else if(result.status === 400){
-              toast.warning("Invalid Email or Password")
-            }
-
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (validation()) {
+      // console.log(logindata)
+      const result = await loginAPI(logindata);
+      // console.log(result);
+      if (result.status === 200) {
+        if (result.data.data.role === "user") {
+          sessionStorage.setItem("user", JSON.stringify(result.data.data));
+          sessionStorage.setItem("token", result.data.token);
+          Swal.fire({
+            title: "Success!",
+            text: 'Login successfully, "please add your grevance to SUPER HERO."',
+            icon: "success",
+            confirmButtonText: "OK",
+          });
+          navigate("/");
+        } else {
+          toast.error("Invalid Email or Password");
         }
-        else{
-          toast.warning("please fill the form completely")
-        }
-        
-
+      } else if (result.status === 400) {
+        toast.warning("Invalid Email or Password");
+      }
+    } else {
+      toast.warning("please fill the form completely");
     }
+  };
   return (
     <>
       <div className="container mx-auto flex flex-col justify-center items-center mt-10 px-10">
@@ -113,9 +96,9 @@ function Login() {
                   onChange={handleOnchange}
                   value={logindata.email}
                 />
-                 {error.email && (
-              <span className="text-red-500">{error.email}</span>
-            )}
+                {error.email && (
+                  <span className="text-red-500">{error.email}</span>
+                )}
               </div>
 
               <div>
@@ -128,15 +111,14 @@ function Login() {
                   onChange={handleOnchange}
                   value={logindata.password}
                 />
-                 {error.password && (
-              <span className="text-red-500">{error.password}</span>
-            )}
+                {error.password && (
+                  <span className="text-red-500">{error.password}</span>
+                )}
               </div>
 
               <div className="flex justify-center">
                 <button
-                onClick={handleSubmit}
-                  
+                  onClick={handleSubmit}
                   className="w-full bg-black text-white font-bold p-2 rounded transition-transform duration-500 hover:scale-105"
                 >
                   LOGIN
