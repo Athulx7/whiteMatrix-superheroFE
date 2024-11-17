@@ -8,7 +8,11 @@ import { Link } from "react-router-dom";
 function UserHome() {
   return (
     <>
-      <div className="container mx-auto flex flex-col md:flex-row justify-center items-center mt-10 mb-20 px-10">
+    <div className="mt-5">
+    <UserBot />
+    </div>
+   
+      <div className="container mx-auto flex flex-col md:flex-row justify-center items-center  mb-20 px-10">
         <div className="md:w-1/2 flex flex-col items-center md:items-start text-center md:text-left">
           <div className="md:ml-8 lg:ml-16">
             <h5 className="text-4xl md:text-3xl font-bold text-red-700">
@@ -39,6 +43,7 @@ function UserHome() {
           
         </div>
       </div>
+      
       
 
       <UserAbout />

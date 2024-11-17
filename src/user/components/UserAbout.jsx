@@ -29,7 +29,7 @@ function UserAbout() {
           </div>
         </div>
       </div>
-      <UserBot />
+      {/* <UserBot /> */}
     </>
   );
 }
