@@ -19,6 +19,8 @@ function UserAbout() {
         <div className="md:w-1/2 flex flex-col items-center md:items-start text-center md:text-left">
           <div className="md:ml-8 lg:ml-16">
             <h5 className="font-bold">OUR VISION</h5>
+            <div className="flex items-center flex-col">
+            <span>
             HeroHub is a unique platform designed to connect individuals in need
             with a superhero dedicated to addressing grievances and delivering
             justice. This website provides a secure and user-friendly space
@@ -26,6 +28,8 @@ function UserAbout() {
             challenges they cannot resolve on their own. With a focus on
             accessibility and efficiency, HeroHub ensures every grievance is
             heard and given the attention it deserves.
+            </span>
+            <span className="mt-5">
             When a user submits a
             grievance, they receive a confirmation email directly from the
             superhero, acknowledging their submission and reassuring them that
@@ -35,6 +39,10 @@ function UserAbout() {
             timely responses. Whether it's a personal issue or a broader
             societal concern, HeroHub empowers individuals, fosters hope, and
             works toward creating a just and supportive community for all.
+            </span>
+            </div>
+           
+            
           </div>
         </div>
       </div>
