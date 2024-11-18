@@ -38,7 +38,7 @@ function UserHome() {
           <img
             src="https://img.freepik.com/premium-vector/silhouette-hero-black-color-only-full-body_925376-75911.jpg"
             alt="Hero Silhouette"
-            className="max-w-full h-auto ms-10 transition-transform duration-500 hover:scale-105"
+            className="max-w-full h-auto ms-10 transition-transform duration-500 hover:scale-95"
           />
           
         </div>

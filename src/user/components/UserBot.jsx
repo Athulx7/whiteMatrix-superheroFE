@@ -15,8 +15,9 @@ function UserBot() {
   
   return (
     <>
-      <div className="flex justify-end me-5 ">
-        <button onClick={() => setModalOpen(true)}>
+      <div className="flex flex-col items-end me-5 ">
+        <span className="text-red-800">"Need Assistance ?"</span>
+        <button className="me-10" onClick={() => setModalOpen(true)}>
           <img src={bot} className="w-12" alt="Bot Image" />
         </button>
       </div>
