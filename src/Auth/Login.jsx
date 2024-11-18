@@ -68,7 +68,7 @@ function Login() {
   return (
     <>
       <div className="container mx-auto flex flex-col justify-center items-center mt-10 px-10">
-        <h5 className="text-2xl font-bold text-red-700">WELCOME USER</h5>
+        <h5 className="text-2xl font-bold text-red-700">PLEASE LOGIN TO ADD YOUR GRIEVNACE</h5>
         <hr className="w-1/2 mt-5" />
       </div>
 
