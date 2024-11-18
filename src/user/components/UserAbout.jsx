@@ -1,5 +1,5 @@
 import React from "react";
-import UserBot from "./UserBot";
+
 
 function UserAbout() {
   return (
@@ -29,7 +29,7 @@ function UserAbout() {
           </div>
         </div>
       </div>
-      {/* <UserBot /> */}
+      
     </>
   );
 }
